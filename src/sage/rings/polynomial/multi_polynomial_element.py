@@ -242,7 +242,8 @@ class MPolynomial_element(MPolynomial):
         if base_map is None:
             # Just use conversion
             base_map = codomain
-        # self.element() is a PolyDict, its dict() maps ETuple's to coefficents
+        # self.element() is a PolyDict,
+        # its dict() maps ETuple's to coefficients
         return sum((base_map(c) * prod(g**e for g, e in zip(im_gens, m) if e)
                     for m, c in self.element().dict().items()), codomain(0))
 
@@ -418,6 +419,8 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
     r"""
     Multivariate polynomials implemented in pure python using
     polydicts.
+
+    .. automethod:: _derivative
     """
     def __init__(self, parent, x):
         """
@@ -1024,7 +1027,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
         INPUT:
 
         - ``prec`` -- desired floating point precision (default:
-          default :class:`RealField` precision)
+          default :func:`~sage.rings.real_mpfr.RealField` precision)
 
         OUTPUT: a real number
 
@@ -1151,7 +1154,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
         - ``i`` -- integer
 
         - ``prec`` -- desired floating point precision (default:
-          default :class:`RealField` precision)
+          default :func:`~sage.rings.real_mpfr.RealField` precision)
 
         OUTPUT: a real number
 
@@ -1266,7 +1269,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
             return list(d.values())[0].inverse_of_unit()
         raise ArithmeticError("is not a unit")
 
-    def is_homogeneous(self):
+    def is_homogeneous(self) -> bool:
         """
         Return ``True`` if ``self`` is a homogeneous polynomial.
 
@@ -1359,10 +1362,11 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
 
     is_generator = deprecated_function_alias(38942, is_gen)
 
-    def is_monomial(self):
+    def is_monomial(self) -> bool:
         """
-        Return ``True`` if ``self`` is a monomial, which we define to be a
-        product of generators with coefficient 1.
+        Return ``True`` if ``self`` is a monomial.
+
+        A monomial is a product of generators with coefficient 1.
 
         Use :meth:`is_term` to allow the coefficient to not be 1.
 
@@ -1387,11 +1391,12 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
         """
         return len(self.element()) == 1 and self.element().coefficients()[0] == 1
 
-    def is_term(self):
+    def is_term(self) -> bool:
         """
-        Return ``True`` if ``self`` is a term, which we define to be a
-        product of generators times some coefficient, which need
-        not be 1.
+        Return ``True`` if ``self`` is a term.
+
+        A term is a product of generators times some coefficient,
+        which need not be 1.
 
         Use :meth:`is_monomial` to require that the coefficient be 1.
 
@@ -1506,7 +1511,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
         except KeyError:
             return self.parent().base_ring().zero()
 
-    def is_univariate(self):
+    def is_univariate(self) -> bool:
         """
         Return ``True`` if this multivariate polynomial is univariate and
         ``False`` otherwise.
@@ -1668,7 +1673,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
         """
         return len(self.degrees().nonzero_positions())
 
-    def is_constant(self):
+    def is_constant(self) -> bool:
         """
         Return ``True`` if ``self`` is a constant and ``False`` otherwise.
 
@@ -1864,7 +1869,7 @@ class MPolynomial_polydict(Polynomial_singular_repr, MPolynomial_element):
 
         .. SEEALSO::
 
-            :meth:`derivative`
+            :meth:`~sage.rings.polynomial.multi_polynomial.MPolynomial.derivative`
 
         EXAMPLES::
 
@@ -2476,7 +2481,8 @@ def degree_lowest_rational_function(r, x):
     .. NOTE::
 
         This function should be made a method of the
-        :class:`FractionFieldElement` class.
+        :class:`~sage.rings.fraction_field_element.FractionFieldElement`
+        class.
 
     EXAMPLES::
 

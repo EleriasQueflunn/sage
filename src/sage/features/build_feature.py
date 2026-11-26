@@ -4,7 +4,7 @@ Features that can be explicitly enabled or disabled at build time
 These features are unique in that, if they are enabled or disabled at
 build-time, then we usually do not want to detect them on-the-fly.
 Instead we trust the value supplied (or detected) at build-time. There
-is however an overrride to defer these checks to run-time (the classic
+is however an override to defer these checks to run-time (the classic
 behavior) for use on binary distros or anywhere it is desirable to
 enable/disable features without rebuilding sage.
 
@@ -13,6 +13,7 @@ This is an implementation of Option 3 in `Github discussion 41067
 """
 
 from sage.features import Feature, FeatureTestResult
+
 
 class BuildFeature(Feature):
     r"""
@@ -43,14 +44,16 @@ class BuildFeature(Feature):
     you should set the member variable ``_enabled_in_build`` to the
     value of that config variable.
 
-    The :meth:`_is_present` method for this class will return the
+    The ``_is_present`` method for this class will return the
     value of that config variable unless ``defer_feature_checks`` is
     set to ``True`` in ``sage.config``. If checks are deferred, the
-    :meth:`_is_present` method will try to return the value of
-    :meth:`is_present_at_runtime` instead. If your feature can be
-    detected at run-time, you should implement that check in
-    :meth:`is_present_at_runtime`. Otherwise, leave it unimplemented;
-    and :meth:`_is_present` will return ``False``.
+    ``_is_present`` method will try to return the value of
+    :meth:`is_present_at_runtime <sage.features.build_feature.BuildModule.is_present_at_runtime>`
+    instead. If your feature can be detected at run-time, you should
+    implement that check in
+    :meth:`is_present_at_runtime <sage.features.build_feature.BuildModule.is_present_at_runtime>`.
+    Otherwise, leave it unimplemented; and ``_is_present`` will return
+    ``False``.
 
     EXAMPLES::
 
@@ -72,7 +75,7 @@ class BuildFeature(Feature):
     # def is_present_at_runtime(self):
     #     pass
 
-    def is_runtime_detectable(self):
+    def is_runtime_detectable(self) -> bool:
         r"""
         Return whether or not this feature can (and should) be
         detected at runtime.
@@ -82,13 +85,13 @@ class BuildFeature(Feature):
         - Deferred feature checks have been enabled globally by
           passing ``-Ddefer_feature_checks=true`` to ``meson setup``.
 
-        - An ``is_present_at_runtime`` method has been implemented for
-          the feature.
+        - An :meth:`is_present_at_runtime <sage.features.build_feature.BuildModule.is_present_at_runtime>`
+          method has been implemented for the feature.
 
         EXAMPLES:
 
         The method returns ``False`` if you have not implemented
-        ``is_present_at_runtime``::
+        :meth:`is_present_at_runtime <sage.features.build_feature.BuildModule.is_present_at_runtime>`::
 
             sage: from sage.features.build_feature import BuildFeature
             sage: bf = BuildFeature("example")

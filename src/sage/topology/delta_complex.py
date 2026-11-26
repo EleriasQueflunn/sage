@@ -1,4 +1,3 @@
-# sage.doctest: needs sage.graphs
 r"""
 Finite Delta-complexes
 
@@ -13,7 +12,7 @@ As Hatcher points out, `\Delta`-complexes were first introduced by Eilenberg
 and Zilber [EZ1950]_, although they called them "semi-simplicial complexes".
 
 A `\Delta`-complex is a generalization of a :mod:`simplicial complex
-<sage.homology.simplicial_complex>`; a `\Delta`-complex `X` consists
+<sage.topology.simplicial_complex>`; a `\Delta`-complex `X` consists
 of sets `X_n` for each nonnegative integer `n`, the elements of which
 are called *n-simplices*, along with *face maps* between these sets of
 simplices: for each `n` and for all `0 \leq i \leq n`, there are
@@ -43,9 +42,9 @@ vertex.
 .. NOTE::
 
    This class derives from
-   :class:`~sage.homology.cell_complex.GenericCellComplex`, and so
+   :class:`~sage.topology.cell_complex.GenericCellComplex`, and so
    inherits its methods.  Some of those methods are not listed here;
-   see the :mod:`Generic Cell Complex <sage.homology.cell_complex>`
+   see the :mod:`Generic Cell Complex <sage.topology.cell_complex>`
    page instead.
 """
 
@@ -65,6 +64,9 @@ lazy_import('sage.matrix.constructor', 'matrix')
 class DeltaComplex(GenericCellComplex):
     r"""
     Define a `\Delta`-complex.
+
+    .. automethod:: _epi_from_standard_simplex
+    .. automethod:: _is_glued
 
     INPUT:
 
@@ -109,7 +111,7 @@ class DeltaComplex(GenericCellComplex):
 
       Let's compute its homology, and also compare it to the simplicial version::
 
-        sage: S5.homology()                                                             # needs sage.modules
+        sage: S5.homology()
         {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: Z}
         sage: S5.f_vector()  # number of simplices in each dimension
         [1, 6, 15, 20, 15, 6, 2]
@@ -130,7 +132,7 @@ class DeltaComplex(GenericCellComplex):
         ....:        Simplex(0): ()}
         sage: T = DeltaComplex(torus_dict); T
         Delta complex with 1 vertex and 7 simplices
-        sage: T.cohomology(base_ring=QQ)                                                # needs sage.modules
+        sage: T.cohomology(base_ring=QQ)
         {0: Vector space of dimension 0 over Rational Field,
          1: Vector space of dimension 2 over Rational Field,
          2: Vector space of dimension 1 over Rational Field}
@@ -181,9 +183,9 @@ class DeltaComplex(GenericCellComplex):
 
       ::
 
-        sage: P.homology(1)                                                             # needs sage.modules
+        sage: P.homology(1)
         C2
-        sage: P.cohomology(2)                                                           # needs sage.modules
+        sage: P.cohomology(2)
         C2
 
       Closely related to this form for ``data`` is ``X.cells()``
@@ -248,7 +250,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: X = DeltaComplex({Simplex(3):True, Simplex(range(1,5)): Simplex(3), Simplex(range(2,6)): Simplex(3)}); X  # indirect doctest
             Delta complex with 4 vertices and 18 simplices
-            sage: X.homology()                                                          # needs sage.modules
+            sage: X.homology()
             {0: 0, 1: 0, 2: 0, 3: Z x Z}
             sage: X == loads(dumps(X))
             True
@@ -403,7 +405,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: X = delta_complexes.Torus()
             sage: A = X.subcomplex({2: [0]})  # one of the triangles of X
-            sage: X.homology(subcomplex=A)                                              # needs sage.modules
+            sage: X.homology(subcomplex=A)
             {0: 0, 1: 0, 2: Z}
 
         In the following, ``line`` is a line segment and ``ends`` is
@@ -416,7 +418,7 @@ class DeltaComplex(GenericCellComplex):
             sage: ends = line.subcomplex({0: (0, 1)})
             sage: ends.cells()
             {-1: ((),), 0: ((), ())}
-            sage: line.homology(subcomplex=ends)                                        # needs sage.modules
+            sage: line.homology(subcomplex=ends)
             {0: 0, 1: Z}
         """
         if isinstance(data, (list, tuple)):
@@ -600,7 +602,6 @@ class DeltaComplex(GenericCellComplex):
 
         EXAMPLES::
 
-            sage: # needs sage.modules
             sage: circle = delta_complexes.Sphere(1)
             sage: circle.chain_complex()
             Chain complex with at most 2 nonzero terms over Integer Ring
@@ -739,7 +740,7 @@ class DeltaComplex(GenericCellComplex):
             Delta complex with 4 vertices and 11 simplices
             sage: S3.n_skeleton(1).dimension()
             1
-            sage: S3.n_skeleton(1).homology()                                           # needs sage.modules
+            sage: S3.n_skeleton(1).homology()
             {0: 0, 1: Z x Z x Z}
         """
         if n >= self.dimension():
@@ -807,7 +808,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: S1 = delta_complexes.Sphere(1)
             sage: X = S1 * S1    # X is a 3-sphere
-            sage: X.homology()                                                          # needs sage.modules
+            sage: X.homology()
             {0: 0, 1: 0, 2: 0, 3: Z}
         """
         data = []
@@ -881,7 +882,7 @@ class DeltaComplex(GenericCellComplex):
             sage: K = delta_complexes.KleinBottle()
             sage: K.cone()
             Delta complex with 2 vertices and 14 simplices
-            sage: K.cone().homology()                                                   # needs sage.modules
+            sage: K.cone().homology()
             {0: 0, 1: 0, 2: 0, 3: 0}
         """
         return self.join(delta_complexes.Simplex(0))
@@ -903,7 +904,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: S = delta_complexes.Sphere(0)
             sage: S3 = S.suspension(3)  # the 3-sphere
-            sage: S3.homology()                                                         # needs sage.modules
+            sage: S3.homology()
             {0: 0, 1: 0, 2: 0, 3: Z}
         """
         if n < 0:
@@ -934,7 +935,6 @@ class DeltaComplex(GenericCellComplex):
             sage: K = delta_complexes.KleinBottle()
             sage: X = K.product(K)
 
-            sage: # needs sage.modules
             sage: X.homology(1)
             Z x Z x C2 x C2
             sage: X.homology(2)
@@ -951,7 +951,7 @@ class DeltaComplex(GenericCellComplex):
              4: Vector space of dimension 1 over Finite Field of size 2}
 
             sage: S1 = delta_complexes.Sphere(1)
-            sage: K.product(S1).homology() == S1.product(K).homology()                  # needs sage.modules
+            sage: K.product(S1).homology() == S1.product(K).homology()
             True
             sage: S1.product(S1) == delta_complexes.Torus()
             True
@@ -1047,7 +1047,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: S1 = delta_complexes.Sphere(1)
             sage: S2 = delta_complexes.Sphere(2)
-            sage: S1.disjoint_union(S2).homology()                                      # needs sage.modules
+            sage: S1.disjoint_union(S2).homology()
             {0: Z, 1: Z, 2: Z}
         """
         dim = max(self.dimension(), right.dimension())
@@ -1079,7 +1079,7 @@ class DeltaComplex(GenericCellComplex):
 
             sage: S1 = delta_complexes.Sphere(1)
             sage: S2 = delta_complexes.Sphere(2)
-            sage: S1.wedge(S2).homology()                                               # needs sage.modules
+            sage: S1.wedge(S2).homology()
             {0: 0, 1: Z, 2: Z}
         """
         data = self.disjoint_union(right).cells()
@@ -1118,7 +1118,8 @@ class DeltaComplex(GenericCellComplex):
 
         Pick a top-dimensional simplex from each complex.  Check to
         see if there are any identifications on either simplex, using
-        the :meth:`_is_glued` method.  If there are no
+        the :meth:`~sage.topology.delta_complex.DeltaComplex._is_glued`
+        method.  If there are no
         identifications, remove the simplices and glue the remaining
         parts of complexes along their boundary.  If there are
         identifications on a simplex, subdivide it repeatedly (using
@@ -1127,7 +1128,6 @@ class DeltaComplex(GenericCellComplex):
 
         EXAMPLES::
 
-            sage: # needs sage.modules
             sage: T = delta_complexes.Torus()
             sage: S2 = delta_complexes.Sphere(2)
             sage: T.connected_sum(S2).cohomology() == T.cohomology()
@@ -1221,7 +1221,8 @@ class DeltaComplex(GenericCellComplex):
           along the boundary of `S`
 
         The algorithm for achieving this uses
-        :meth:`_epi_from_standard_simplex` to keep track of simplices
+        :meth:`~sage.topology.delta_complex.DeltaComplex._epi_from_standard_simplex`
+        to keep track of simplices
         (with multiplicity) and what their faces are: this method
         defines a surjection `\pi` from the standard `d`-simplex to
         `S`.  So first remove `S` and add a new vertex `w`, say at the
@@ -1258,7 +1259,7 @@ class DeltaComplex(GenericCellComplex):
             Delta complex with 2 vertices and 13 simplices
             sage: X.elementary_subdivision()
             Delta complex with 3 vertices and 19 simplices
-            sage: X.homology() == T.homology()                                          # needs sage.modules
+            sage: X.homology() == T.homology()
             True
         """
         pi = self._epi_from_standard_simplex(idx=idx)
@@ -1506,12 +1507,12 @@ class DeltaComplex(GenericCellComplex):
         EXAMPLES::
 
             sage: T = delta_complexes.Torus()
-            sage: T.n_chains(1, QQ)                                                     # needs sage.modules
+            sage: T.n_chains(1, QQ)
             Free module generated by {(0, (0, 0)), (1, (0, 0)), (2, (0, 0))}
              over Rational Field
-            sage: list(T.n_chains(1, QQ, cochains=False).basis())                       # needs sage.modules
+            sage: list(T.n_chains(1, QQ, cochains=False).basis())
             [(0, (0, 0)), (1, (0, 0)), (2, (0, 0))]
-            sage: list(T.n_chains(1, QQ, cochains=True).basis())                        # needs sage.modules
+            sage: list(T.n_chains(1, QQ, cochains=True).basis())
             [\chi_(0, (0, 0)), \chi_(1, (0, 0)), \chi_(2, (0, 0))]
         """
         from sage.homology.chains import Chains, Cochains
@@ -1568,7 +1569,6 @@ class DeltaComplex(GenericCellComplex):
 
         EXAMPLES::
 
-            sage: # needs sage.modules
             sage: RP2 = delta_complexes.RealProjectivePlane()
             sage: phi, M = RP2.algebraic_topological_model(GF(2))
             sage: M.homology()
@@ -1621,7 +1621,7 @@ class DeltaComplexExamples:
         sage: S = delta_complexes.Sphere(6) # the 6-sphere
         sage: S.dimension()
         6
-        sage: S.cohomology(6)                                                           # needs sage.modules
+        sage: S.cohomology(6)
         Z
         sage: delta_complexes.Torus() == delta_complexes.Sphere(3)
         False
@@ -1640,7 +1640,7 @@ class DeltaComplexExamples:
 
         EXAMPLES::
 
-            sage: delta_complexes.Sphere(4).cohomology(4, base_ring=GF(3))              # needs sage.modules
+            sage: delta_complexes.Sphere(4).cohomology(4, base_ring=GF(3))
             Vector space of dimension 1 over Finite Field of size 3
         """
         if n == 1:
@@ -1657,7 +1657,7 @@ class DeltaComplexExamples:
 
         EXAMPLES::
 
-            sage: delta_complexes.Torus().homology(1)                                   # needs sage.modules sage.rings.finite_rings
+            sage: delta_complexes.Torus().homology(1)
             Z x Z
         """
         return DeltaComplex((((),), ((0, 0), (0, 0), (0, 0)),
@@ -1672,7 +1672,6 @@ class DeltaComplexExamples:
 
         EXAMPLES::
 
-            sage: # needs sage.modules
             sage: P = delta_complexes.RealProjectivePlane()
             sage: P.cohomology(1)
             0
@@ -1737,9 +1736,9 @@ class DeltaComplexExamples:
 
             sage: delta_complexes.SurfaceOfGenus(1, orientable=False)
             Delta complex with 2 vertices and 8 simplices
-            sage: delta_complexes.SurfaceOfGenus(3, orientable=False).homology(1)       # needs sage.modules
+            sage: delta_complexes.SurfaceOfGenus(3, orientable=False).homology(1)
             Z x Z x C2
-            sage: delta_complexes.SurfaceOfGenus(3, orientable=False).homology(2)       # needs sage.modules
+            sage: delta_complexes.SurfaceOfGenus(3, orientable=False).homology(2)
             0
 
         Compare to simplicial complexes::
@@ -1750,7 +1749,7 @@ class DeltaComplexExamples:
             sage: simpl_g4 = simplicial_complexes.SurfaceOfGenus(4)
             sage: simpl_g4.f_vector()
             [1, 19, 75, 50]
-            sage: delta_g4.homology() == simpl_g4.homology()                            # needs sage.modules
+            sage: delta_g4.homology() == simpl_g4.homology()
             True
         """
         try:
@@ -1773,5 +1772,69 @@ class DeltaComplexExamples:
             S = S.connected_sum(X)
         return S
 
+    def HypersurfaceComplement(self, n, d):
+        r"""
+        A deformation retract of the complement of a smooth hypersurface of
+        degree `d` in `\mathbb{CP}^n`.
+
+        Return a Delta complex that is a strong deformation retract of the
+        complement of a smooth hypersurface of degree `d` in the projective
+        complex space of dimension `n`.
+
+        INPUT:
+
+        -``n`` -- positive integer; the dimension of the ambient space.
+
+        -``d`` -- positive integer; the degree of the hypersurface.
+
+        EXAMPLES::
+
+            sage: delta_complexes.HypersurfaceComplement(2,2)
+            Delta complex with 3 vertices and 14 simplices
+            sage: delta_complexes.HypersurfaceComplement(2,2).homology(1)
+            C2
+            sage: delta_complexes.HypersurfaceComplement(2,2).homology(2)
+            0
+
+        REFERENCES:
+
+        For more information on how the delta complex is computed, see
+        [ALM2026]_.
+        """
+        from sage.combinat.tuple import Tuples
+        resdic = [{tuple(i*[0] + [1] + (n-i)*[0]): None for i in range(n+1)}]
+        resdic.extend({} for _ in range(n))
+
+        for nzerosi in range(n + 1):
+            for t in Tuples(range(d + 1), n - nzerosi):
+                T = nzerosi*[0] + [1] + list(t)
+                dimT = len(T) - T.count(0) - 2
+                if dimT >= 0:
+                    caras = []
+                    for i in range(n + 1):
+                        if T[i] != 0:
+                            CT = copy(T)
+                            CT[i] = 0
+                            v = next(filter(lambda a : a != 0, CT))
+                            correct = v - 1
+                            for i in range(len(CT)):
+                                if CT[i] != 0:
+                                    CT[i] -= correct
+                                    if CT[i] <= 0:
+                                        CT[i] += d
+                            caras.append(tuple(CT))
+                    resdic[dimT+1][tuple(T)] = caras
+
+        DC = [[tuple() for _ in range(n + 1)]]
+        for i in range(1, n + 1):
+            lis = []
+            for v in resdic[i].values():
+                lisp = []
+                for s in v:
+                    lisp.append(list(resdic[i-1].keys()).index(s))
+                lis.append(lisp)
+            DC.append(lis)
+
+        return DeltaComplex(DC)
 
 delta_complexes = DeltaComplexExamples()

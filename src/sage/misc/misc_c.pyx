@@ -306,8 +306,7 @@ class NonAssociative:
         """
         if self.right is None:
             return str(self.left)
-        else:
-            return "(%s*%s)" % (self.left, self.right)
+        return "(%s*%s)" % (self.left, self.right)
 
     def __mul__(self, other):
         """
@@ -754,7 +753,7 @@ def cyflush():
     EXAMPLES::
 
         sage: R.<t> = QQ[]
-        sage: t^(sys.maxsize//2)                                                        # needs sage.libs.flint
+        sage: t^(sys.maxsize//2)
         Traceback (most recent call last):
         ...
         RuntimeError: FLINT exception
