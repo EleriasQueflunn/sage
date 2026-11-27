@@ -2391,7 +2391,7 @@ class Partition(CombinatorialElement):
         half of an `n \times n`-square. The region to the northeast of
         this Dyck path can be regarded as a partition. It is called the
         partition corresponding to the Dyck word `w`. (See
-        :meth:`~sage.combinat.dyck_word.DyckWord.to_partition`.)
+        :meth:`~sage.combinat.dyck_word.DyckWord_complete.to_partition`.)
 
         For every partition `\lambda` and every nonnegative integer `n`,
         there exists at most one `n`-Dyck word `w` such that the
@@ -4375,7 +4375,7 @@ class Partition(CombinatorialElement):
         partitions).
 
         These are also known as **path sequences**, **Maya diagrams**,
-        **plus-minus diagrams**, **Comet code** [Sta-EC2]_, among others.
+        **plus-minus diagrams**, **Comet code** [EnumComb2]_, among others.
 
         OUTPUT:
 
